@@ -1,0 +1,17 @@
+VISTA CABS — PHASE 1–4 REVIEW BUILD
+
+START HERE
+1. Extract the ZIP and open its root folder in VS Code.
+2. Install Node.js 20.9+ and run `npm install` at the root.
+3. Run `npm run dev` to start the website and API. Or use `npm run dev:web` and `npm run dev:api` separately.
+4. Open http://localhost:3000. Check http://localhost:5000/api/health.
+5. The review copy has frontend/.env.local with the temporary owner-provided test number. Replace it with the approved client number before launch.
+6. MongoDB is optional for local development. Without it, submitted enquiries are written to backend/data/inquiries.jsonl. This file contains personal data; keep it private. Production requires a configured MongoDB URI.
+7. Copy backend/.env.example to backend/.env and configure values as needed. Never commit secrets.
+8. Build checks: `npm run build` and `npm run build:api`. If Windows denies writes to the existing `.next`, use `$env:NEXT_DIST_DIR='.codex-next-build'; npm run build` in PowerShell.
+
+CONTENT
+Six city hubs, 18 destination guides (seven Nashik local guides and 11 regional guides), route and airport pages, four service pages and the Kumbh Mela information page. Phase 4 deepens destination and city content. GoCabish is an information-architecture inspiration only; Vista branding and business claims remain its own.
+
+BEFORE PUBLIC LAUNCH
+Confirm coverage, airports, logo, domain, client phone/WhatsApp, fleet, hours, quote wording, Kumbh event details, MongoDB, privacy/retention, production CORS and API URL. Inspect mobile/tablet/desktop, submit enquiries, verify saved records and test WhatsApp on a real device. Admin/CMS remains deferred as previously requested.
