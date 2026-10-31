@@ -1,15 +1,61 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { Facebook, Instagram, Linkedin, Mail, MessageCircle, Phone, Youtube } from 'lucide-react';
-import { site, cities, airports } from '@/lib/site';
+import Image from 'next/image';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import { formatPhone, site } from '@/lib/site';
+import { InstagramIcon, LinkedInIcon } from '@/components/SocialIcons';
 
-export default function SiteFooter(){
- const socials=[['Instagram',site.instagram,Instagram],['Facebook',site.facebook,Facebook],['YouTube',site.youtube,Youtube],['LinkedIn',site.linkedin,Linkedin]] as const;
- const showDemo=site.demoContacts&&(!site.email||socials.every(([,url])=>!url));
- return <footer id="contact" className="bg-[#071a2f] py-12 text-white sm:py-14"><div className="container-wide"><div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]"><div><Image src="/brand/vistar-cabs-logo.webp" alt="Vistar Cabs" width={176} height={37} className="h-10 w-auto rounded-lg bg-white px-2 object-contain"/><p className="mt-4 max-w-xs text-sm leading-6 text-slate-300">Nashik rooted. Maharashtra connected. Plan local, intercity and airport cab enquiries with Vistar Cabs.</p><div className="mt-5 space-y-2 text-xs text-slate-300">{site.phone&&<a className="flex items-center gap-2 hover:text-white" href={`tel:${site.phone}`}><Phone size={14}/>{site.phone}</a>}{site.whatsapp&&<a className="flex items-center gap-2 hover:text-white" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noreferrer"><MessageCircle size={14}/>WhatsApp Vistar Cabs</a>}{site.email&&<a className="flex items-center gap-2 hover:text-white" href={`mailto:${site.email}`}><Mail size={14}/>{site.email}</a>}</div>{socials.some(([,url])=>Boolean(url))&&<div className="mt-5 flex gap-2">{socials.filter(([,url])=>Boolean(url)).map(([label,url,Icon])=><a key={label} href={url} target="_blank" rel="noreferrer" aria-label={label} title={label} className="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"><Icon size={16}/></a>)}</div>}{showDemo&&<div className="mt-5 rounded-xl border border-amber-300/25 bg-amber-300/10 p-3 text-[10px] leading-5 text-amber-100"><b className="block">Preview placeholders - replace before launch</b>{!site.email&&<span className="block">Email: hello@vistarcabs.example</span>}{socials.every(([,url])=>!url)&&<span className="block">Demo IDs: Instagram @vistarcabs_demo · Facebook Vistar Cabs Nashik demo</span>}</div>}</div>
-  <div><h2 className="text-sm font-black">Company</h2><div className="mt-4 grid gap-3 text-xs text-slate-300"><Link href="/about-us" className="hover:text-white">About Vistar Cabs</Link><Link href="/about-nashik" className="hover:text-white">About Nashik</Link><Link href="/#feedback" className="hover:text-white">Customer feedback</Link><Link href="/#faqs" className="hover:text-white">Frequently asked questions</Link><Link href="/kumbh-mela-nashik" className="hover:text-white">Simhastha travel guide</Link></div>{site.demoContacts&&<p className="mt-5 text-[10px] leading-5 text-amber-200/80">Development preview: replace the test callback number and demo IDs before launch.</p>}</div>
-  <div><h2 className="text-sm font-black">Services & airports</h2><div className="mt-4 grid gap-3 text-xs text-slate-300"><Link href="/outstation-cab-service" className="hover:text-white">Outstation journeys</Link><Link href="/airport-taxi" className="hover:text-white">Airport transfers</Link><Link href="/local-cab-service" className="hover:text-white">Local Nashik trips</Link>{airports.map(a=><Link key={a.slug} href={`/airports/${a.slug}`} className="hover:text-white">{a.city} airport · {a.code}</Link>)}</div></div>
-  <div><h2 className="text-sm font-black">Cities & useful links</h2><div className="mt-4 grid gap-3 text-xs text-slate-300">{cities.map(c=><Link key={c.slug} href={`/cities/${c.slug}`} className="hover:text-white">{c.name} city guide</Link>)}<Link href="/sitemap.xml" className="hover:text-white">Sitemap</Link></div><p className="mt-5 text-[10px] leading-5 text-slate-500">Privacy, cancellation and refund terms will be published after owner approval.</p></div></div><div className="mt-9 flex flex-col justify-between gap-2 border-t border-white/10 pt-5 text-[10px] text-slate-500 sm:flex-row"><span>© {new Date().getFullYear()} Vistar Cabs</span><span>Availability, fares and trip terms are confirmed directly.</span></div></div></footer>
+const serviceChips = [
+  { label: 'Airport', href: '/airport-taxi' },
+  { label: 'Local', href: '/local-cab-service' },
+  { label: 'One Way Cab', href: '/outstation-cab-service' },
+  { label: 'Round Trip Cab', href: '/outstation-cab-service' },
+  { label: 'Outstation', href: '/outstation-cab-service' },
+  { label: 'Corporate Cabs', href: '/corporate-cabs' },
+  { label: 'Kumbh Mela 2026-2028', href: '/kumbh-mela-nashik' },
+];
+const company = [{ label: 'About Us', href: '/about-us' }, { label: 'Contact Us', href: '/contact-us' }, { label: 'Blogs', href: '/blogs' }, { label: 'Corporate Cabs', href: '/corporate-cabs' }];
+const useful = [{ label: 'Home', href: '/' }, { label: 'Book a cab', href: '/#book' }, { label: 'Cities', href: '/#cities' }, { label: 'Airports', href: '/#airports' }, { label: 'FAQs', href: '/faq' }, { label: 'Kumbh Mela', href: '/kumbh-mela-nashik' }];
+
+export default function SiteFooter() {
+  const socials = [
+    { label: 'Follow Vistar Cabs on Instagram', href: site.instagram, icon: <InstagramIcon /> },
+    { label: 'Vistar Cabs on LinkedIn', href: site.linkedin, icon: <LinkedInIcon /> },
+  ].filter(s => s.href);
+
+  return (
+    <footer id="contact" className="bg-[#0b1a33] pb-28 pt-12 text-white sm:pb-24">
+      <div className="container-wide">
+        <div className="grid gap-8 border-b border-white/10 pb-8 lg:grid-cols-2">
+          <div>
+            <h2 className="flex items-center gap-4 text-[11px] font-black uppercase tracking-[.2em] text-slate-300"><span>Available in states</span><span className="h-px flex-1 bg-white/10" /></h2>
+            <div className="mt-3 flex flex-wrap gap-2"><span className="rounded-md border border-white/20 px-2.5 py-1 text-[11px] text-slate-200">Maharashtra</span></div>
+          </div>
+          <div>
+            <h2 className="flex items-center gap-4 text-[11px] font-black uppercase tracking-[.2em] text-slate-300"><span>Available services</span><span className="h-px flex-1 bg-white/10" /></h2>
+            <div className="mt-3 flex flex-wrap gap-2">{serviceChips.map(c => <Link key={c.label} href={c.href} className="rounded-md border border-white/20 px-2.5 py-1 text-[11px] text-slate-200 transition hover:border-amber-300 hover:text-amber-300">{c.label}</Link>)}</div>
+          </div>
+        </div>
+
+        <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_.8fr_.8fr_1fr]">
+          <div>
+            <Link href="/" aria-label="Vistar Cabs home" className="inline-block rounded-xl bg-white px-3 py-2"><Image src="/brand/vistar-cabs-logo.webp" alt="Vistar Cabs" width={176} height={37} className="h-9 w-auto object-contain" /></Link>
+            <ul className="mt-5 grid gap-3 text-sm text-slate-300">
+              {site.phones.map(p => <li key={p}><a href={`tel:${p}`} className="flex items-center gap-2.5 hover:text-white"><Phone size={15} className="text-orange-400" aria-hidden="true" />{formatPhone(p)}</a></li>)}
+              <li><a href={`mailto:${site.email}`} className="flex items-center gap-2.5 hover:text-white"><Mail size={15} className="text-orange-400" aria-hidden="true" />{site.email}</a></li>
+              <li className="flex items-start gap-2.5"><MapPin size={15} className="mt-0.5 shrink-0 text-orange-400" aria-hidden="true" /><span className="leading-6">{site.address}</span></li>
+            </ul>
+          </div>
+          <nav aria-label="Company"><h2 className="text-base font-extrabold">Company</h2><ul className="mt-4 grid gap-3 text-sm text-slate-300">{company.map(l => <li key={l.label}><Link href={l.href} className="hover:text-white">{l.label}</Link></li>)}</ul></nav>
+          <nav aria-label="Useful links"><h2 className="text-base font-extrabold">Useful Links</h2><ul className="mt-4 grid gap-3 text-sm text-slate-300">{useful.map(l => <li key={l.label}><Link href={l.href} className="hover:text-white">{l.label}</Link></li>)}</ul></nav>
+          <div>
+            <h2 className="text-base font-extrabold">Follow us</h2>
+            <div className="mt-4 flex gap-3">{socials.map(s => <a key={s.href} href={s.href} target="_blank" rel="noreferrer noopener" aria-label={s.label} className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#0b1a33] transition hover:bg-amber-300">{s.icon}</a>)}</div>
+            <p className="mt-4 text-xs leading-5 text-slate-400">Send your trip details and the team will call you back to confirm the vehicle and fare.</p>
+          </div>
+        </div>
+
+        <p className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-slate-400">© {new Date().getFullYear()} Vistar Cabs. All rights reserved.</p>
+      </div>
+    </footer>
+  );
 }
-
-

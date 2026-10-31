@@ -55,3 +55,11 @@ Also the banner on route pages that end in that city.
 
 - [ ] `kumbh-mela-nashik.jpg`
 - [ ] `about-nashik.jpg`
+
+## New pages (added with the Kumbh, corporate, about, contact and blog pages)
+
+- [ ] `services/corporate-cab-service.jpg` (corporate section, shown on the homepage and /corporate-cabs)
+- [ ] `about-us.jpg` (About Us banner) and `about-us-story.jpg` (picture beside the story)
+- [ ] `contact-us.jpg`, `blogs.jpg`, `faq.jpg` (page banners)
+- [ ] `kumbh-mela-nashik.jpg` (also used for the homepage Kumbh banner; the Nashik ghats at Ramkund suit it best)
+- [ ] `blogs/<post-slug>.jpg` for each article, for example `blogs/nashik-to-trimbakeshwar-travel-guide.jpg`

@@ -8,12 +8,12 @@
 export type EnquiryData = {
   name: string; phone: string; tripType: string; from: string; to: string;
   pickupDate: string; pickupTime: string; returnDate: string; duration: string;
-  airportDirection: string; passengers?: number; notes: string;
+  airportDirection: string; passengers?: number; notes?: string;
 };
 
 export type NotifyResult = { sms: boolean; whatsapp: boolean; any: boolean };
 
-const clean = (s: string) => s.replace(/[\r\n]+/g, ' ').trim();
+const clean = (s?: string) => (s ?? '').replace(/[\r\n]+/g, ' ').trim();
 
 export function buildMessage(d: EnquiryData, compact = false): string {
   const route = d.tripType === 'Local Trip' ? clean(d.from) : `${clean(d.from)} to ${clean(d.to)}`;
@@ -55,17 +55,28 @@ async function sendTwilio(to: string, from: string, body: string): Promise<boole
   }
 }
 
-export async function notifyOwner(d: EnquiryData): Promise<NotifyResult> {
+export type CorporateData = { contactPerson: string; email: string; phone: string; city: string; requirements?: string };
+export type ContactData = { name: string; phone: string; email?: string; message: string };
+
+export const buildCorporateMessage = (c: CorporateData) =>
+  ['New Vistar Cabs CORPORATE enquiry', `Contact: ${clean(c.contactPerson)}`, `Phone: ${clean(c.phone)}`, `Email: ${clean(c.email)}`, `City: ${clean(c.city)}`, ...(c.requirements ? [`Requirements: ${clean(c.requirements)}`] : [])].join('\n');
+
+export const buildContactMessage = (c: ContactData) =>
+  ['New Vistar Cabs website message', `Name: ${clean(c.name)}`, `Phone: ${clean(c.phone)}`, ...(c.email ? [`Email: ${clean(c.email)}`] : []), `Message: ${clean(c.message)}`].join('\n');
+
+/** Sends any text to the owner by SMS (short) and WhatsApp (full). Never throws. */
+export async function notifyOwnerText(full: string, short = full.slice(0, 300)): Promise<NotifyResult> {
   const smsTo = process.env.OWNER_SMS_TO;
   const smsFrom = process.env.TWILIO_SMS_FROM;
   const waTo = process.env.OWNER_WHATSAPP_TO;
   const waFrom = process.env.TWILIO_WHATSAPP_FROM;
-
   const [sms, whatsapp] = await Promise.all([
-    smsTo && smsFrom ? sendTwilio(smsTo, smsFrom, buildMessage(d, true)) : Promise.resolve(false),
+    smsTo && smsFrom ? sendTwilio(smsTo, smsFrom, short) : Promise.resolve(false),
     waTo && waFrom
-      ? sendTwilio(`whatsapp:${waTo.replace(/^whatsapp:/, '')}`, waFrom.startsWith('whatsapp:') ? waFrom : `whatsapp:${waFrom}`, buildMessage(d))
+      ? sendTwilio(`whatsapp:${waTo.replace(/^whatsapp:/, '')}`, waFrom.startsWith('whatsapp:') ? waFrom : `whatsapp:${waFrom}`, full)
       : Promise.resolve(false),
   ]);
   return { sms, whatsapp, any: sms || whatsapp };
 }
+
+export const notifyOwner = (d: EnquiryData) => notifyOwnerText(buildMessage(d), buildMessage(d, true));

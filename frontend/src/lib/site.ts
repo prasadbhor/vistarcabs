@@ -1,12 +1,16 @@
 export const site = {
   name: 'Vistar Cabs',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-  phone: process.env.NEXT_PUBLIC_PRIMARY_PHONE || '+918788373586',
-  whatsapp: (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '918788373586').replace(/\D/g, ''),
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || '',
-  instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || '',
+  // First number is used for the Call button and as the WhatsApp number.
+  phone: process.env.NEXT_PUBLIC_PRIMARY_PHONE || '+918767613575',
+  whatsapp: (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '918767613575').replace(/\D/g, ''),
+  phones: ['+918767613575', '+918485884417', '+918788373586'],
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@vistarcabs.com',
+  address: 'Vistar Cabs, Shop No. 2, Divya Swapna, opposite Nirgude Hospital, Jail Road, Nashik Road, Nashik',
+  instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/vistar.tours/',
   facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL || '',
   youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL || '',
+  // Add the LinkedIn page address to NEXT_PUBLIC_LINKEDIN_URL when it is ready; the icon appears automatically.
   linkedin: process.env.NEXT_PUBLIC_LINKEDIN_URL || '',
   demoContacts: false,
   apiUrl: (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, ''),
@@ -88,3 +92,6 @@ export const destinationGuides=[
  {citySlug:'pune',cityName:'Pune',slug:'mahabaleshwar',name:'Mahabaleshwar',category:'Hill destination',title:'Plan a Pune to Mahabaleshwar road enquiry',intro:'Mahabaleshwar is a hill station in the Satara region, known for its plateau scenery and viewpoints. Specify the locations you want to visit, your stay area and return or overnight plan; seasonal road conditions can affect travel.',planning:['List the viewpoints or attractions you plan to include.','Check current local conditions and venue access before travel.','State whether you need a return journey, overnight arrangement or luggage space.'],faq:[['Can I request multiple viewpoints?','Include the stop order and expected time at each; the team will confirm the requested plan.'],['Is travel time fixed?','No. Weather, traffic, road conditions and stops affect journey time.']]},
 ];
 
+
+/** "+918767613575" -> "+91 87676 13575" */
+export const formatPhone = (tel: string) => tel.replace(/^\+91(\d{5})(\d{5})$/, '+91 $1 $2');

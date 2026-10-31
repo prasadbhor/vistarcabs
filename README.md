@@ -52,3 +52,22 @@ Built on top of `Kunal/feat`. Nothing from that branch was removed.
 - **Dev badge:** the Next.js "N" development badge is turned off.
 
 Not verified here: real delivery of Twilio messages, real iPhone and Android devices, and the Playwright suite in `frontend/tests` (not re-run).
+
+## Update notes (feat/feet2)
+
+Built on `feat/vistar-updates` (which is built on `Kunal/feat`).
+
+- **Enquiry form:** the optional Trip notes field was removed everywhere (form, saved data, WhatsApp message, alerts). The button now reads **Send Enquiry**. On a phone the whole form, including the button, fits on the first screen.
+- **Owner WhatsApp 8767613575:** new enquiries are sent to `OWNER_WHATSAPP_TO` (set to +918767613575 in `backend/.env.example`) through Twilio. Fill in the `TWILIO_*` values in `backend/.env` to switch this on. Until then the visitor sees a **Continue on WhatsApp** button that opens a message prefilled to 8767613575, and the enquiry is still saved.
+- **Navigation:** Home, About Us, Contact Us, Blogs and Services. Services lists Corporate Cabs (`/corporate-cabs`), Outstation Cabs, Airport Taxi and Local Cabs. The old `/corporate-cab-service` address redirects to `/corporate-cabs`.
+- **Homepage:** hero form, then the Kumbh Mela banner immediately after it, then services, the corporate mobility section, cities, airports, routes, **Our Valuable Customer Feedback** (sliding carousel), FAQ and footer.
+- **Kumbh Mela page (`/kumbh-mela-nashik`):** restructured like the reference (guide, timetable, local transport, safety, how to reach, how to enquire, FAQ). It has no fare table because no Vistar Cabs rates were supplied. Dates were cross-checked against news reports of the Maharashtra government announcement.
+- **Corporate Cabs (`/corporate-cabs`):** hero card, use cases, how it works, FAQ, and the **Get Started** pop-up form (contact person, work email, number, city, requirements). It is saved and sent to the owner like an enquiry. Opening `/corporate-cabs#corporate-enquiry` opens the form directly.
+- **About Us and Contact Us:** new pages following the reference structure. Contact shows the three phone numbers, info@vistarcabs.com, the Nashik Road address with a directions link, and a message form (saved and sent to the owner).
+- **Blogs (`/blogs`):** five original articles in `frontend/src/lib/blogs.ts`. Edit or add posts there.
+- **Customer feedback:** real Google reviews from the owner, in `frontend/src/lib/reviews.ts`. No ratings were invented. Only the overall 5.0 from 41 Google reviews is shown, because per-review star ratings were not supplied.
+- **FAQ:** `frontend/src/lib/faqs.ts`, adapted to how Vistar Cabs works (enquiry first, team confirms fare, no online payment). Edit the answers if policies differ. There is also an `/faq` page.
+- **Contact buttons and social:** real WhatsApp icon bottom-left, Call button bottom-right (calls 8767613575). Instagram links to instagram.com/vistar.tours. LinkedIn appears automatically once its address is put in `NEXT_PUBLIC_LINKEDIN_URL`.
+- **Spam protection:** the corporate and contact forms have a hidden field that bots fill in; those submissions are dropped silently.
+
+Not included: Terms, Privacy, Cancellation and Refund pages (the owner must supply the policy wording), an admin view for corporate and contact messages (they are stored in `backend/data/leads.jsonl` in development, or in MongoDB), and real photos. See `frontend/public/images/README.md` for photo names.
