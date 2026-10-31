@@ -15,7 +15,8 @@ const loginSchema=z.object({username:z.string().trim().min(1).max(80),password:z
 const statusSchema=z.object({status:z.enum(['new','contacted','closed'])});
 
 function devMode(){return process.env.NODE_ENV!=='production'}
-function credentials(){return {username:process.env.ADMIN_USERNAME||(devMode()?'vistar-admin':''),password:process.env.ADMIN_PASSWORD||(devMode()?'VistarDemo!2026':''),secret:process.env.ADMIN_SESSION_SECRET||(devMode()?'Vistar Cabs-local-preview-secret-change-before-launch':'' )}}
+function devPreview(){return process.env.ADMIN_DEV_PREVIEW==='true'}
+function credentials(){return {username:process.env.ADMIN_USERNAME||(devPreview()?'vistar-admin':''),password:process.env.ADMIN_PASSWORD||(devPreview()?'VistarDemo!2026':''),secret:process.env.ADMIN_SESSION_SECRET||(devPreview()?'Vistar Cabs-local-preview-secret-change-before-launch':'')}}
 function same(a:string,b:string){const x=Buffer.from(a);const y=Buffer.from(b);return x.length===y.length&&timingSafeEqual(x,y)}
 function makeToken(exp:string,secret:string){return `${exp}.${createHmac('sha256',secret).update(exp).digest('hex')}`}
 function cookieToken(req:Request){const raw=req.headers.cookie||'';for(const part of raw.split(';')){const [name,...rest]=part.trim().split('=');if(name===COOKIE)return decodeURIComponent(rest.join('='));}return ''}

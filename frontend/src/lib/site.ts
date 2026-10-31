@@ -1,14 +1,14 @@
 export const site = {
   name: 'Vistar Cabs',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-  phone: process.env.NEXT_PUBLIC_PRIMARY_PHONE || (process.env.NODE_ENV !== 'production' ? '8390622685' : ''),
-  whatsapp: (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || (process.env.NODE_ENV !== 'production' ? '918390622685' : '')).replace(/\D/g, ''),
+  phone: process.env.NEXT_PUBLIC_PRIMARY_PHONE || '+918788373586',
+  whatsapp: (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '918788373586').replace(/\D/g, ''),
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || '',
   instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || '',
   facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL || '',
   youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL || '',
   linkedin: process.env.NEXT_PUBLIC_LINKEDIN_URL || '',
-  demoContacts: process.env.NODE_ENV !== 'production',
+  demoContacts: false,
   apiUrl: (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, ''),
   description: 'Plan local, intercity and airport cab enquiries from Nashik across Maharashtra with Vistar Cabs.',
 };

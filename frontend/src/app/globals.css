@@ -9,7 +9,7 @@ button, a { touch-action: manipulation; }
 .container-wide { width: min(1160px, calc(100% - 40px)); margin-inline: auto; }
 .eyebrow { letter-spacing: .16em; text-transform: uppercase; font-size: 11px; font-weight: 800; }
 .hero-surface { background: radial-gradient(ellipse at 82% 16%, rgba(255,255,255,.22), transparent 36%), linear-gradient(118deg, #0758c9 0%, #0b68e8 54%, #2788f1 100%); }
-.booking-hero { background-image:linear-gradient(90deg,rgba(5,55,125,.78) 0%,rgba(5,68,145,.58) 48%,rgba(5,72,145,.40) 100%),url('/images/scenic-hero-alt.png');background-position:center 48%;background-size:cover;background-repeat:no-repeat;isolation:isolate; }
+.booking-hero { background-image:linear-gradient(90deg,rgba(5,55,125,.78) 0%,rgba(5,68,145,.58) 48%,rgba(5,72,145,.40) 100%),url('/images/scenic-hero-alt.webp');background-position:center 48%;background-size:cover;background-repeat:no-repeat;isolation:isolate; }
 .scene-hills { display:none; }
 .scene-hills::before,.scene-hills::after { content:"";position:absolute;left:-8%;right:-8%;bottom:0; }
 .scene-hills::before { height:42%;background:linear-gradient(165deg,transparent 0 18%,rgba(20,50,73,.45) 18.3% 100%);clip-path:polygon(0 68%,18% 33%,34% 67%,50% 17%,70% 70%,84% 30%,100% 68%,100% 100%,0 100%); }
@@ -42,3 +42,5 @@ button, a { touch-action: manipulation; }
 @media (max-width: 360px) { .container-wide { width: calc(100% - 22px); } .enquiry-card { padding: 10px; } }
 @media (prefers-reduced-motion: reduce) { .floating-contact-link::after { animation: none; opacity: 0; } }
 
+
+@media (max-width: 420px) { .enquiry-card input[type=date], .enquiry-card input[type=time] { font-size: 14.5px; padding-right: 6px; } }

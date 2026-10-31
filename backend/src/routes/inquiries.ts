@@ -4,6 +4,7 @@ import { appendFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import mongoose from 'mongoose';
 import Inquiry from '../models/Inquiry';
+import { notifyOwner } from '../services/notify';
 const router=Router();
 const inquirySchema=z.object({
  name:z.string().trim().min(2).max(80),
@@ -26,13 +27,16 @@ router.post('/',async(req,res,next)=>{try{
  if(data.tripType!=='Local Trip'&&data.to.length<2){res.status(400).json({ok:false,message:'Please enter a destination.'});return;}
  if(data.tripType==='Round Trip'&&!data.returnDate){res.status(400).json({ok:false,message:'Please select a return date.'});return;}
  if(data.tripType==='Round Trip'&&data.returnDate<data.pickupDate){res.status(400).json({ok:false,message:'Return date must be on or after the pickup date.'});return;}
- if(mongoose.connection.readyState===1){const inquiry=await Inquiry.create(data);res.status(201).json({ok:true,storage:'mongodb',message:'Enquiry saved.',id:inquiry.id});return;}
- if(process.env.NODE_ENV!=='production'){
+ let storage:string|null=null;let id:string|undefined;
+ if(mongoose.connection.readyState===1){const inquiry=await Inquiry.create(data);storage='mongodb';id=inquiry.id;}
+ else if(process.env.NODE_ENV!=='production'){
   const file=process.env.INQUIRY_STORE_PATH||resolve(__dirname,'../../data/inquiries.jsonl');
   await mkdir(dirname(file),{recursive:true});
   await appendFile(file,`${JSON.stringify({ ...data,createdAt:new Date().toISOString(),status:'new' })}\n`,{encoding:'utf8',mode:0o600});
-  res.status(201).json({ok:true,storage:'local-development-file',message:'Enquiry saved for local development.'});return;
+  storage='local-development-file';
  }
- res.status(503).json({ok:false,message:'Enquiry storage is unavailable. Please continue through WhatsApp.'});
+ const sent=await notifyOwner(data);
+ if(!storage&&!sent.any){res.status(503).json({ok:false,message:'Enquiry storage is unavailable. Please continue through WhatsApp.'});return;}
+ res.status(201).json({ok:true,storage,notified:sent.any,id,message:'Enquiry received.'});
 }catch(error){next(error);}});
 export default router;
